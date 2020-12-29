@@ -41,3 +41,12 @@ func (u *udpConn) Rebind() error {
 
 	return syscall.SetsockoptInt(int(file.Fd()), unix.IPPROTO_IP, unix.IP_BOUND_IF, 0)
 }
+
+func (u *udpConn) Rebind6() error {
+	file, err := u.File()
+	if err != nil {
+		return err
+	}
+
+	return syscall.SetsockoptInt(int(file.Fd()), unix.IPPROTO_IPV6, unix.IP_BOUND_IF, 0)
+}

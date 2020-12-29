@@ -130,7 +130,8 @@ func Main(config *Config, configTest bool, buildVersion string, logger *logrus.L
 	var udpServer *udpConn
 
 	if !configTest {
-		udpServer, err = NewListener(config.GetString("listen.host", "0.0.0.0"), config.GetInt("listen.port", 0), udpQueues > 1)
+		// udpServer, err = NewListener(config.GetString("listen.host", "0.0.0.0"), config.GetInt("listen.port", 0), udpQueues > 1)
+		udpServer, err = NewListener6(config.GetString("listen.host6", "[::]"), config.GetInt("listen.port", 0), udpQueues > 1)
 		if err != nil {
 			return nil, NewContextualError("Failed to open udp listener", nil, err)
 		}
@@ -258,7 +259,7 @@ func Main(config *Config, configTest bool, buildVersion string, logger *logrus.L
 		if ok {
 			for _, v := range vals {
 				parts := strings.Split(fmt.Sprintf("%v", v), ":")
-				addr, err := net.ResolveIPAddr("ip", parts[0])
+				addr, err := net.ResolveIPAddr("ip6", parts[0])
 				if err == nil {
 					ip := addr.IP
 					port, err := strconv.Atoi(parts[1])
@@ -271,7 +272,7 @@ func Main(config *Config, configTest bool, buildVersion string, logger *logrus.L
 		} else {
 			//TODO: make this all a helper
 			parts := strings.Split(fmt.Sprintf("%v", v), ":")
-			addr, err := net.ResolveIPAddr("ip", parts[0])
+			addr, err := net.ResolveIPAddr("ip6", parts[0])
 			if err == nil {
 				ip := addr.IP
 				port, err := strconv.Atoi(parts[1])

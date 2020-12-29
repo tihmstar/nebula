@@ -58,6 +58,18 @@ func NewListener(ip string, port int, multi bool) (*udpConn, error) {
 	return nil, fmt.Errorf("Unexpected PacketConn: %T %#v", pc, pc)
 }
 
+func NewListener6(ip string, port int, multi bool) (*udpConn, error) {
+	lc := NewListenConfig(multi)
+	pc, err := lc.ListenPacket(context.TODO(), "udp6", fmt.Sprintf("%s:%d", ip, port))
+	if err != nil {
+		return nil, err
+	}
+	if uc, ok := pc.(*net.UDPConn); ok {
+		return &udpConn{UDPConn: uc}, nil
+	}
+	return nil, fmt.Errorf("Unexpected PacketConn: %T %#v", pc, pc)
+}
+
 func (ua *udpAddr) Equals(t *udpAddr) bool {
 	if t == nil || ua == nil {
 		return t == nil && ua == nil

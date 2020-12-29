@@ -67,6 +67,11 @@ func (c *Control) RebindUDPServer() {
 	_ = c.f.outside.Rebind()
 }
 
+func (c *Control) RebindUDPServer6() {
+	_ = c.f.outside.Rebind6()
+}
+
+
 // ListHostmap returns details about the actual or pending (handshaking) hostmap
 func (c *Control) ListHostmap(pendingMap bool) []ControlHostInfo {
 	var hm *HostMap
