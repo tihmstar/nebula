@@ -197,7 +197,7 @@ func (m *NebulaMetaDetails) GetCounter() uint32 {
 }
 
 type IpAndPort struct {
-	Ip                   uint32   `protobuf:"varint,1,opt,name=Ip,json=ip,proto3" json:"Ip,omitempty"`
+	Ip                   []byte   `protobuf:"varint,1,opt,name=Ip,json=ip,proto3" json:"Ip,omitempty"`
 	Port                 uint32   `protobuf:"varint,2,opt,name=Port,json=port,proto3" json:"Port,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
@@ -229,11 +229,8 @@ func (m *IpAndPort) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_IpAndPort proto.InternalMessageInfo
 
-func (m *IpAndPort) GetIp() uint32 {
-	if m != nil {
-		return m.Ip
-	}
-	return 0
+func (m *IpAndPort) GetIp() []byte {
+	return m.Ip
 }
 
 func (m *IpAndPort) GetPort() uint32 {

@@ -266,7 +266,7 @@ func Main(config *Config, configTest bool, buildVersion string, logger *logrus.L
 					if err != nil {
 						return nil, NewContextualError("Static host address could not be parsed", m{"vpnIp": vpnIp}, err)
 					}
-					lightHouse.AddRemote(ip2int(vpnIp), NewUDPAddr(ip2int(ip), uint16(port)), true)
+					lightHouse.AddRemote(ip2int(vpnIp), NewUDPAddr(ip, uint16(port)), true)
 				}
 			}
 		} else {
@@ -279,7 +279,7 @@ func Main(config *Config, configTest bool, buildVersion string, logger *logrus.L
 				if err != nil {
 					return nil, NewContextualError("Static host address could not be parsed", m{"vpnIp": vpnIp}, err)
 				}
-				lightHouse.AddRemote(ip2int(vpnIp), NewUDPAddr(ip2int(ip), uint16(port)), true)
+				lightHouse.AddRemote(ip2int(vpnIp), NewUDPAddr(ip, uint16(port)), true)
 			}
 		}
 	}

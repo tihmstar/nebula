@@ -10,3 +10,7 @@
 /cpu.pprof
 /build
 /*.tar.gz
+ca.crt
+config.yml
+host.crt
+host.key

@@ -150,7 +150,7 @@ func (c *HandshakeManager) handleOutbound(vpnIP uint32, f EncWriter, lighthouseT
 					WithField("initiatorIndex", hostinfo.localIndexId).
 					WithField("remoteIndex", hostinfo.remoteIndexId).
 					WithField("handshake", m{"stage": 1, "style": "ix_psk0"}).
-					WithError(err).Error("Failed to send handshake message")
+					WithError(err).Error("handleOutbound: Failed to send handshake message")
 			} else {
 				//TODO: this log line is assuming a lot of stuff around the cached stage 0 handshake packet, we should
 				// keep the real packet struct around for logging purposes
