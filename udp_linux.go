@@ -22,12 +22,16 @@ type udpConn struct {
 }
 
 type udpAddr struct {
-	IP   uint32
-	Port uint16
+	net.UDPAddr
 }
 
-func NewUDPAddr(ip uint32, port uint16) *udpAddr {
-	return &udpAddr{IP: ip, Port: port}
+func NewUDPAddr(ip []byte, port uint16) *udpAddr {
+	return &udpAddr{
+		UDPAddr: net.UDPAddr{
+			IP:   ip,
+			Port: int(port),
+		},
+	}
 }
 
 func NewUDPAddrFromString(s string) *udpAddr {
@@ -38,14 +42,16 @@ func NewUDPAddrFromString(s string) *udpAddr {
 
 	port, _ := strconv.Atoi(p[1])
 	return &udpAddr{
-		IP:   ip2int(net.ParseIP(p[0])),
-		Port: uint16(port),
+		UDPAddr: net.UDPAddr{
+			IP:   net.ParseIP(p[0]),
+			Port: int(port),
+		},
 	}
 }
 
 type rawSockaddr struct {
 	Family uint16
-	Data   [14]uint8
+	Data   [26]uint8
 }
 
 type rawSockaddrAny struct {
@@ -168,11 +174,14 @@ func (u *udpConn) LocalAddr() (*udpAddr, error) {
 
 	addr := &udpAddr{}
 	if rsa.Addr.Family == unix.AF_INET {
-		addr.Port = uint16(rsa.Addr.Data[0])<<8 + uint16(rsa.Addr.Data[1])
-		addr.IP = uint32(rsa.Addr.Data[2])<<24 + uint32(rsa.Addr.Data[3])<<16 + uint32(rsa.Addr.Data[4])<<8 + uint32(rsa.Addr.Data[5])
+		addr.Port = int(uint16(rsa.Addr.Data[0])<<8 + uint16(rsa.Addr.Data[1]))
+		addr.IP = rsa.Addr.Data[2:5]
+	} else if rsa.Addr.Family == unix.AF_INET6 {
+		addr.Port = int(uint16(rsa.Addr.Data[0])<<8 + uint16(rsa.Addr.Data[1]))
+		addr.IP = rsa.Addr.Data[6:22]
 	} else {
 		addr.Port = 0
-		addr.IP = 0
+		addr.IP = make([]byte, 0)
 	}
 	return addr, nil
 }
