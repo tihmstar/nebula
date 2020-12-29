@@ -233,7 +233,7 @@ func NewLhWhoami() *NebulaMeta {
 // End Quick generators for protobuf
 
 func NewIpAndPortFromUDPAddr(addr udpAddr) IpAndPort {
-	return IpAndPort{Ip: udp2ipInt(&addr), Port: uint32(addr.Port)}
+	return IpAndPort{Ip: udp2ip(&addr), Port: uint32(addr.Port)}
 }
 
 func (lh *LightHouse) LhUpdateWorker(f EncWriter) {
@@ -247,7 +247,7 @@ func (lh *LightHouse) LhUpdateWorker(f EncWriter) {
 		for _, e := range *localIps(lh.localAllowList) {
 			// Only add IPs that aren't my VPN/tun IP
 			if ip2int(e) != lh.myIp {
-				ipp = append(ipp, &IpAndPort{Ip: ip2int(e), Port: uint32(lh.nebulaPort)})
+				ipp = append(ipp, &IpAndPort{Ip: e, Port: uint32(lh.nebulaPort)})
 				//fmt.Println(e)
 			}
 		}
@@ -438,7 +438,7 @@ func (lhh *LightHouseHandler) HandleRequest(rAddr *udpAddr, vpnIp uint32, p []by
 				lh.punchConn.WriteTo(empty, vpnPeer)
 
 			}()
-			l.Debugf("Punching %s on %d for %s", IntIp(a.Ip), a.Port, IntIp(n.Details.VpnIp))
+			l.Debugf("Punching %s on %d for %s", a.Ip, a.Port, IntIp(n.Details.VpnIp))
 		}
 		// This sends a nebula test packet to the host trying to contact us. In the case
 		// of a double nat or other difficult scenario, this may help establish

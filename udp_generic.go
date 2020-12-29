@@ -22,10 +22,10 @@ type udpConn struct {
 	*net.UDPConn
 }
 
-func NewUDPAddr(ip uint32, port uint16) *udpAddr {
+func NewUDPAddr(ip []byte, port uint16) *udpAddr {
 	return &udpAddr{
 		UDPAddr: net.UDPAddr{
-			IP:   int2ip(ip),
+			IP:   ip,
 			Port: int(port),
 		},
 	}
